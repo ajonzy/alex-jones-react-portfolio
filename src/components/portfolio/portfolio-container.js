@@ -3,10 +3,10 @@ import React, {Component} from "react"
 import PortfolioItem from "./portfolio-item"
 
 const names = [
-    {title: "Alex", category: "Utah"}, 
-    {title: "Kaitlyn", category: "Utah"},
-    {title: "Aaron", category: "Maine"}, 
-    {title: "Mariah", category: "Maine"}
+    {title: "Alex", category: "Utah", slug: "Alex"}, 
+    {title: "Kaitlyn", category: "Utah", slug: "Kaitlyn"},
+    {title: "Aaron", category: "Maine", slug: "Aaron"}, 
+    {title: "Mariah", category: "Maine", slug: "Mariah"}
 ]
 
 export default class extends Component {
@@ -19,7 +19,6 @@ export default class extends Component {
             data: names
         }
 
-        this.handlePageTitleUpdate = this.handlePageTitleUpdate.bind(this)
         this.handleFilter = this.handleFilter.bind(this)
     }
 
@@ -39,15 +38,7 @@ export default class extends Component {
 
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} />
-        })
-    }
-
-    handlePageTitleUpdate() {
-        this.state.pageTitle == "Welcome to my portfolio!" ? this.setState({
-            pageTitle: "Something Else"
-        }) : this.setState({
-            pageTitle: "Welcome to my portfolio!"
+            return <PortfolioItem title={item.title} slug={item.slug} />
         })
     }
 
@@ -59,14 +50,13 @@ export default class extends Component {
         return (
             <div>
                 <h2>{this.state.pageTitle}</h2>
-                <button onClick={this.handlePageTitleUpdate}>Change Title</button>
 
                 <hr/>
 
-                {this.portfolioItems()}
                 <button onClick={() => this.handleFilter("Maine")}>Maine</button>
                 <button onClick={() => this.handleFilter("Utah")}>Utah</button>
                 <button onClick={() => this.handleReset()}>Reset</button>
+                {this.portfolioItems()}
 
                 <hr/>
 
