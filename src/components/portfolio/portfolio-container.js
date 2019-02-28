@@ -1,13 +1,8 @@
 import React, {Component} from "react"
+import axios from "axios"
 
 import PortfolioItem from "./portfolio-item"
 
-const names = [
-    {title: "Alex", category: "Utah", slug: "Alex"}, 
-    {title: "Kaitlyn", category: "Utah", slug: "Kaitlyn"},
-    {title: "Aaron", category: "Maine", slug: "Aaron"}, 
-    {title: "Mariah", category: "Maine", slug: "Mariah"}
-]
 
 export default class extends Component {
     constructor() {
@@ -16,10 +11,10 @@ export default class extends Component {
         this.state = {
             pageTitle: "Welcome to my portfolio!",
             isLoading: false,
-            data: names
+            data: []
         }
 
-        this.handleFilter = this.handleFilter.bind(this)
+    this.handleFilter = this.handleFilter.bind(this)
     }
 
     handleFilter(filter) {
@@ -32,14 +27,32 @@ export default class extends Component {
 
     handleReset() {
         this.setState({
-            data: names
+            data: []
         })
+    }
+
+    getPortfolioItems() {
+        axios.get('https://alexjones.devcamp.space/portfolio/portfolio_items')
+          .then(response => {
+              console.log(response);
+              
+          this.setState({
+              data: response.data.portfolio_items
+          })
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
 
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} slug={item.slug} />
+            return <PortfolioItem key={item.id} title={item.name} pic={item.logo_url} slug={item.slug} />
         })
+    }
+
+    componentDidMount() {
+        this.getPortfolioItems()
     }
 
     render() {
