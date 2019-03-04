@@ -26,9 +26,17 @@ export default class extends Component {
     }
 
     handleReset() {
-        this.setState({
-            data: []
+        axios.get('https://alexjones.devcamp.space/portfolio/portfolio_items')
+          .then(response => {
+              console.log(response);
+              
+          this.setState({
+              data: response.data.portfolio_items
+          })
         })
+        .catch(error => {
+          console.log(error);
+        });
     }
 
     getPortfolioItems() {
@@ -47,7 +55,7 @@ export default class extends Component {
 
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem key={item.id} title={item.name} pic={item.logo_url} slug={item.slug} />
+            return <PortfolioItem key={item.id} item={item} />
         })
     }
 
@@ -61,18 +69,12 @@ export default class extends Component {
         }
 
         return (
-            <div>
-                <h2>{this.state.pageTitle}</h2>
-
-                <hr/>
-
-                <button onClick={() => this.handleFilter("Maine")}>Maine</button>
-                <button onClick={() => this.handleFilter("Utah")}>Utah</button>
-                <button onClick={() => this.handleReset()}>Reset</button>
+            <div className="portfolio-items-wrapper">
+                <button className="btn" onClick={() => this.handleFilter("React")}>React</button>
+                <button className="btn" onClick={() => this.handleFilter("Python")}>Python</button>
+                <button className="btn" onClick={() => this.handleFilter("HTML5")}>HTML5</button>
+                {/* <button className="btn" onClick={() => this.handleReset()}>Reset</button> */}
                 {this.portfolioItems()}
-
-                <hr/>
-
             </div>
         )
     }
